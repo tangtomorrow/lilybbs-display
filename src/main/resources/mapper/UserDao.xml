@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tym.dao.UserDao">
+    <!-- 目的:为dao接口方法提供sql语句配置 -->
+    <insert id="insertUser">
+        insert into user(user_id,user_name,login_times,post_articles,title,constellation,last_login_time,last_login_ip,experience,performance,life,moderators)
+        value(#{userId}, #{userName}, #{loginTimes}, #{postArticles}, #{title}, #{constellation},#{lastLoginTime}, #{lastLoginIp}, #{experience}, #{performance}, #{life}, #{moderators})
+        <!--
+        #{userid,jdbcType=VARCHAR},
+        #{username,jdbcType=VARCHAR},
+        #{loginTimes,jdbcType=INTEGER},
+        #{postArticles,jdbcType=INTEGER},
+        #{title,jdbcType=VARCHAR},
+        #{constellation,jdbcType=VARCHAR},
+        #{lastLoginTime,jdbcType=TIMESTAMP},
+        #{lastLoginIp,jdbcType=VARCHAR},
+        #{experience,jdbcType=INTEGER},
+        #{performance,jdbcType=INTEGER},
+        #{life,jdbcType=INTEGER},
+        #{moderators,jdbcType=VARCHAR}
+        -->
+    </insert>
+
+    <select id="queryById" resultType="User">
+        select id,user_id,user_name,login_times,post_articles,title,constellation,last_login_time,last_login_ip,experience,performance,life,moderators,exist,create_time
+        from user
+        where id = #{id}
+    </select>
+
+    <select id="queryByUserId" resultType="User">
+        select id,user_id,user_name,login_times,post_articles,title,constellation,last_login_time,last_login_ip,experience,performance,life,moderators,exist,create_time
+        from user
+        where user_id = #{userid}
+    </select>
+
+    <select id="queryAll" resultType="User">
+        select id,user_id,user_name,login_times,post_articles,title,constellation,last_login_time,last_login_ip,experience,performance,life,moderators,exist,create_time
+        from user
+        order by create_time DESC
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="getUserCount" resultType="Integer">
+        select count(*) from user;
+    </select>
+
+    <update id="updateByUserId">
+        update user
+        set user_name = #{userName}, login_times = #{loginTimes}, post_articles = #{postArticles}, title = #{title},
+        constellation = #{constellation}, last_login_time = #{lastLoginTime}, last_login_ip = #{lastLoginIp},
+        experience = #{experience}, performance = #{performance}, life = #{life}, moderators = #{moderators}, exist = #{exist}
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteById">
+        delete from user where id = #{id}
+    </delete>
+
+    <delete id="deleteByUserId">
+        delete from user where user_id = #{userId}
+    </delete>
+
+    <!-- 模糊查询 -->
+    <!-- <select id="qureyModeratorsByBoard" parameterType="String"> -->
+    <select id="qureyModeratorsByBoard" resultType="User">
+        <bind name="boardName" value="'%' + _parameter + '%'" />
+        select id,user_id,user_name,login_times,post_articles,title,constellation,last_login_time,last_login_ip,experience,performance,life,moderators,exist,create_time
+        from user
+        where moderators like #{boardName}
+    </select>
+</mapper>

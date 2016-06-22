@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tym.dao.LoginInfoDao">
+    <!-- 目的:为dao接口方法提供sql语句配置 -->
+    <insert id="insertLoginInfo">
+        <!--
+            主键冲突,报错
+            联合主键相同,只插入一次
+            加上ignore才不会报错
+        -->
+        insert ignore into logininfo(user_id, login_time, login_ip)
+        values (#{userId}, #{loginTime}, #{loginTime})
+    </insert>
+
+    <select id="queryByUserId" resultType="LoginInfo">
+        select user_id, login_time, login_ip, create_time
+        from logininfo
+        where user_id = #{userId};
+    </select>
+</mapper>
